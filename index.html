@@ -1773,7 +1773,18 @@ const MP = (() => {
   function loadTrack(i, autoplay) {
     idx = (i + playlist.length) % playlist.length;
     const t = playlist[idx];
-    audio.src = t.file;
+    // encodeURIComponent xử lý tên file có ký tự đặc biệt, tiếng Việt, tiếng Trung
+    // Encode tên file để xử lý ký tự đặc biệt, tiếng Việt, Trung, dấu cách...
+    if (t.file) {
+      try {
+        // Tách tên file khỏi đường dẫn thư mục rồi encode riêng
+        const parts = t.file.split('/');
+        const encoded = parts.map((p, i) => i === parts.length - 1 ? encodeURIComponent(p) : p).join('/');
+        audio.src = encoded;
+      } catch(e) { audio.src = t.file; }
+    } else {
+      audio.src = '';
+    }
     audio.load();
     // Update UI
     const name = t.ten || t.file;
