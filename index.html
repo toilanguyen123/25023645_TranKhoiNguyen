@@ -34,10 +34,388 @@ if (typeof CONFIG === 'undefined') {
 </script>
 
   <style>
-    :root { --green:#1D9E75; --green-light:#E1F5EE; --green-mid:#0F6E56; --text:#1a1a1a; --text-muted:#6b7280; }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Be Vietnam Pro',sans-serif;background:#f9fafb;color:var(--text);min-height:100vh}
-    /* minimal CSS kept for brevity; full styles are present in original file */
+    :root {
+      --green:       #1D9E75;
+      --green-light: #E1F5EE;
+      --green-mid:   #0F6E56;
+      --text:        #1a1a1a;
+      --text-muted:  #6b7280;
+      --text-hint:   #9ca3af;
+      --bg:          #f9fafb;
+      --bg-card:     #ffffff;
+      --bg-secondary:#f3f4f6;
+      --border:      rgba(0,0,0,0.09);
+      --border-med:  rgba(0,0,0,0.15);
+      --radius-sm:   6px;
+      --radius-md:   10px;
+      --radius-lg:   14px;
+      --shadow:      0 1px 4px rgba(0,0,0,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg-card); border-bottom: 0.5px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 56px;
+    }
+    .nav-logo { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; }
+    .nav-logo span { color: var(--green); }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-link {
+      font-size: 13px; font-weight: 500; color: var(--text-muted);
+      cursor: pointer; padding: 6px 14px; border-radius: 99px;
+      transition: all 0.18s; border: none; background: none;
+    }
+    .nav-link:hover { background: var(--bg-secondary); color: var(--text); }
+    .nav-link.active { background: var(--green-light); color: var(--green-mid); }
+    .page { display: none; max-width: 860px; margin: 0 auto; padding: 36px 24px 60px; }
+    .page.active { display: block; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 99px;
+      background: var(--green-light); color: var(--green-mid); margin-bottom: 14px;
+    }
+    h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.4px; margin-bottom: 6px; }
+    h2 { font-size: 17px; font-weight: 600; letter-spacing: -0.2px; margin-bottom: 0; }
+    h3 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+    .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 28px; }
+    .card {
+      background: var(--bg-card); border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 20px 24px;
+      margin-bottom: 16px; box-shadow: var(--shadow);
+    }
+    .field { margin-bottom: 14px; }
+    .field-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
+      text-transform: uppercase; color: var(--text-hint); margin-bottom: 5px;
+    }
+    .field-value { font-size: 14px; color: var(--text); }
+    .field-text { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+    .placeholder {
+      background: var(--bg-secondary); border: 0.5px dashed var(--border-med);
+      border-radius: var(--radius-md); padding: 11px 14px;
+      font-size: 13px; color: var(--text-hint); font-style: italic; line-height: 1.5;
+    }
+    .img-placeholder {
+      border: 1.5px dashed var(--border-med); border-radius: var(--radius-md);
+      padding: 16px; text-align: center;
+      background: var(--bg-secondary); font-size: 12px; color: var(--text-hint);
+    }
+    .img-placeholder svg { display: block; margin: 0 auto 6px; opacity: 0.35; }
+    .screenshot-container {
+      margin-top: 10px; margin-bottom: 14px;
+      background: var(--bg-secondary); border: 0.5px solid var(--border-med);
+      border-radius: var(--radius-md); padding: 12px;
+    }
+    .screenshot-img {
+      display: block; width: 100%; height: auto; max-height: 380px;
+      object-fit: contain; border-radius: var(--radius-sm);
+      border: 0.5px solid rgba(0,0,0,0.05); background: #fafafa;
+    }
+    .screenshot-caption {
+      font-size: 11.5px; color: var(--text-muted);
+      text-align: center; margin-top: 8px; font-style: italic;
+    }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+    .op-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .op-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--bg-secondary); border: 0.5px solid var(--border-med);
+      border-radius: var(--radius-md); padding: 6px 12px;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .op-pill code {
+      background: #e8f4f0; color: var(--green-mid);
+      padding: 1px 6px; border-radius: 4px; font-family: monospace; font-size: 11px;
+    }
+    a.op-pill { text-decoration: none; cursor: pointer; transition: all 0.2s ease; }
+    a.op-pill:hover { filter: brightness(0.95); transform: translateY(-2px); box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .table-responsive { overflow-x: auto; margin-top: 10px; border-radius: var(--radius-md); border: 0.5px solid var(--border); }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 700px; }
+    .compare-table th {
+      background: var(--green-light); color: var(--green-mid);
+      font-weight: 600; padding: 12px; text-align: left;
+      border-bottom: 1px solid rgba(29,158,117,0.2);
+    }
+    .compare-table td { padding: 12px; border-bottom: 0.5px solid var(--border); color: var(--text-muted); vertical-align: top; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: var(--bg-secondary); }
+    .prompt-box {
+      border-radius: var(--radius-md); padding: 12px 14px;
+      font-size: 13px; line-height: 1.6; font-family: monospace;
+      word-wrap: break-word; white-space: pre-wrap;
+    }
+    .prompt-before { background: #fff5f5; border: 0.5px solid #fca5a5; color: #7f1d1d; }
+    .prompt-after  { background: #f0fdf4; border: 0.5px solid #86efac; color: #14532d; }
+    .prompt-label  { font-size: 11px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; margin-bottom: 6px; }
+    .prompt-label.before { color: #dc2626; }
+    .prompt-label.after  { color: var(--green); }
+    .principle-list { list-style: none; margin-top: 8px; }
+    .principle-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; color: var(--text-muted); line-height: 1.5;
+    }
+    .principle-list li:last-child { border-bottom: none; }
+    .principle-num {
+      width: 22px; height: 22px; min-width: 22px; border-radius: 50%;
+      background: var(--green-light); color: var(--green-mid);
+      font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 1px;
+    }
+    .ref-list { list-style: none; padding-left: 20px; }
+    .ref-list li { font-size: 13px; color: var(--text-muted); line-height: 1.6; text-indent: -20px; margin-bottom: 10px; }
+    .step-list { margin-top: 12px; }
+    .step-item { padding-left: 20px; border-left: 2px solid var(--green-light); margin-bottom: 24px; position: relative; }
+    .step-item::before {
+      content: ''; position: absolute; left: -5px; top: 2px;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--green-mid);
+    }
+    .step-title { font-weight: 600; color: var(--green-mid); font-size: 14px; margin-bottom: 6px; }
+    .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px; }
+    .step-desc code {
+      background: var(--bg-secondary); border: 0.5px solid var(--border-med);
+      padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; color: var(--text);
+    }
+    .tasks-wrap {
+      background: var(--bg-card); border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow);
+      display: grid; grid-template-columns: 210px minmax(0, 1fr);
+      min-height: 540px; overflow: hidden;
+    }
+    .task-menu { border-right: 0.5px solid var(--border); padding: 12px 10px; background: #fafafa; }
+    .task-menu-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; color: var(--text-hint); padding: 4px 10px 10px;
+    }
+    .task-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 12px; border-radius: var(--radius-md);
+      cursor: pointer; transition: background 0.15s; margin-bottom: 2px;
+    }
+    .task-item:hover { background: var(--bg-secondary); }
+    .task-item.active { background: var(--green-light); }
+    .task-item.active .task-num { background: var(--green); color: #fff; border-color: transparent; }
+    .task-item.active .task-name { color: var(--green-mid); font-weight: 600; }
+    .task-num {
+      width: 22px; height: 22px; min-width: 22px; border-radius: 50%;
+      background: var(--bg-card); border: 0.5px solid var(--border-med);
+      color: var(--text-muted); font-size: 11px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.15s;
+    }
+    .task-name { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+    .task-panel { display: none; padding: 24px 28px; }
+    .task-panel.active { display: block; }
+    .task-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; padding-bottom: 16px; border-bottom: 0.5px solid var(--border);
+    }
+    .task-big-num {
+      width: 36px; height: 36px; min-width: 36px; border-radius: 50%;
+      background: var(--green-light); color: var(--green-mid);
+      font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center;
+    }
+    .stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-card {
+      background: var(--bg-card); border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 18px; text-align: center; box-shadow: var(--shadow);
+    }
+    .stat-num { font-size: 28px; font-weight: 600; color: var(--green); letter-spacing: -1px; }
+    .stat-lbl { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 8px; margin-top: 12px; }
+    .skill-tag {
+      background: var(--bg-secondary); border-radius: var(--radius-md);
+      padding: 9px 10px; font-size: 12px; color: var(--text-muted); text-align: center; font-weight: 500;
+    }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+    .lesson-box {
+      background: linear-gradient(135deg, var(--green-light) 0%, #d1fae5 100%);
+      border-left: 4px solid var(--green);
+      border-radius: var(--radius-md); padding: 16px 18px; margin-top: 16px;
+    }
+    .lesson-box h4 { font-size: 12px; font-weight: 700; color: var(--green-mid); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+    .lesson-box p { font-size: 13px; color: #065f46; line-height: 1.7; margin: 0; }
+    .video-wrap {
+      background: #000; border-radius: var(--radius-md); overflow: hidden;
+      margin-top: 10px; position: relative;
+    }
+    .video-wrap video { display: block; width: 100%; max-height: 420px; }
+    .video-caption { font-size: 11.5px; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
+    .product-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fef3c7; border: 1px solid #fcd34d; color: #92400e;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 99px; margin-bottom: 10px;
+    }
+    .dl-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--green); color: #fff;
+      font-size: 12px; font-weight: 600; padding: 8px 16px;
+      border-radius: var(--radius-md); text-decoration: none;
+      transition: background 0.2s, transform 0.1s; margin-top: 16px;
+    }
+    .dl-btn:hover { background: #059669; transform: translateY(-1px); }
+    .dl-btn svg { flex-shrink: 0; }
+    .resource-hub {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 20px; margin-top: 8px;
+    }
+    .resource-hub h3 {
+      font-size: 14px; font-weight: 700; color: var(--text-primary);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .resource-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;
+    }
+    .resource-item {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 12px 14px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .resource-item a {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; font-weight: 600; color: var(--green-mid);
+      text-decoration: none; word-break: break-word;
+    }
+    .resource-item a:hover { color: var(--green); }
+    .resource-item .res-desc { font-size: 11px; color: var(--text-muted); padding-left: 22px; }
+    .res-pdf { color: #dc2626; }
+    .res-mp4 { color: #7c3aed; }
+    @media (max-width: 640px) {
+      nav { padding: 0 16px; }
+      .page { padding: 24px 14px 48px; }
+      .tasks-wrap { grid-template-columns: 1fr; }
+      .task-menu { border-right: none; border-bottom: 0.5px solid var(--border); }
+      .info-grid, .two-col { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: repeat(3,1fr); }
+    }
+    #bg-canvas {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1; pointer-events: none;
+    }
+    /* ══ MUSIC PLAYER ══ */
+    #music-player {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      width: 300px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(29,158,117,0.2);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: 0 8px 32px rgba(29,158,117,0.15), 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.3s ease; user-select: none;
+    }
+    #music-player.collapsed { width: auto; border-radius: 50px; padding: 8px 14px 8px 8px; }
+    #music-player.collapsed .player-full { display: none; }
+    #music-player.collapsed .player-mini { display: flex; }
+    .player-mini { display: none; align-items: center; gap: 10px; }
+    .player-full { display: block; }
+    .mp-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .mp-art {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      background: var(--green-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .mp-info { flex: 1; min-width: 0; }
+    .mp-title {
+      font-size: 13px; font-weight: 600; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .mp-artist { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .mp-collapse {
+      width: 24px; height: 24px; border-radius: 50%; border: none;
+      background: var(--bg-secondary); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); font-size: 14px; flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .mp-collapse:hover { background: var(--green-light); color: var(--green); }
+    /* Progress bar */
+    .mp-progress { margin: 8px 0; }
+    .mp-progress-bar {
+      width: 100%; height: 3px; background: var(--bg-secondary);
+      border-radius: 2px; cursor: pointer; position: relative;
+    }
+    .mp-progress-fill {
+      height: 100%; background: var(--green); border-radius: 2px;
+      width: 0%; transition: width 0.5s linear; pointer-events: none;
+    }
+    .mp-time { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    /* Controls */
+    .mp-controls { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0; }
+    .mp-btn {
+      border: none; background: none; cursor: pointer;
+      color: var(--text-muted); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; padding: 4px;
+    }
+    .mp-btn:hover { color: var(--green); background: var(--green-light); }
+    .mp-btn.active { color: var(--green); }
+    #mp-play-btn {
+      width: 40px; height: 40px;
+      background: var(--green); color: #fff; border-radius: 50%;
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    #mp-play-btn:hover { background: var(--green-mid); transform: scale(1.08); }
+    /* Volume */
+    .mp-volume { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+    .mp-vol-icon { color: var(--text-muted); flex-shrink: 0; }
+    .mp-vol-slider {
+      flex: 1; -webkit-appearance: none; height: 3px;
+      border-radius: 2px; background: var(--bg-secondary); outline: none; cursor: pointer;
+    }
+    .mp-vol-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 12px; height: 12px;
+      border-radius: 50%; background: var(--green); cursor: pointer;
+    }
+    /* Playlist */
+    .mp-playlist-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 10px; padding-top: 10px;
+      border-top: 0.5px solid var(--border);
+      font-size: 11px; font-weight: 600; color: var(--text-muted);
+      cursor: pointer; letter-spacing: 0.3px; text-transform: uppercase;
+    }
+    .mp-playlist-toggle:hover { color: var(--green); }
+    .mp-playlist {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .mp-playlist.open { max-height: 180px; overflow-y: auto; }
+    .mp-playlist::-webkit-scrollbar { width: 3px; }
+    .mp-playlist::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 2px; }
+    .mp-track {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 4px; border-radius: 8px; cursor: pointer;
+      font-size: 12px; color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .mp-track:hover { background: var(--bg-secondary); color: var(--text); }
+    .mp-track.active { background: var(--green-light); color: var(--green-mid); font-weight: 600; }
+    .mp-track-num { width: 18px; text-align: center; font-size: 11px; flex-shrink: 0; }
+    .mp-track-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* Bars animation */
+    .music-bars { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+    .music-bars span {
+      display: block; width: 3px; border-radius: 2px; background: var(--green);
+      animation: bar-bounce 0.8s ease-in-out infinite;
+    }
+    .music-bars span:nth-child(1){height:5px;animation-delay:0s}
+    .music-bars span:nth-child(2){height:10px;animation-delay:.15s}
+    .music-bars span:nth-child(3){height:7px;animation-delay:.3s}
+    .music-bars span:nth-child(4){height:12px;animation-delay:.1s}
+    .music-bars.paused span { animation-play-state: paused; }
+    @keyframes bar-bounce {
+      0%,100%{transform:scaleY(.5)} 50%{transform:scaleY(1.4)}
+    }
+    @media (max-width: 640px) {
+      #music-player { width: 260px; bottom: 12px; right: 12px; }
+      #music-player.collapsed { width: auto; }
+    }
   </style>
 </head>
 <body>
@@ -45,6 +423,8 @@ if (typeof CONFIG === 'undefined') {
 <canvas id="bg-canvas"></canvas>
 
 <div id="music-player" class="collapsed">
+
+  <!-- Mini (collapsed) -->
   <div class="player-mini">
     <button id="mp-play-btn" onclick="MP.toggle()" style="width:34px;height:34px;">
       <svg id="mp-play-icon" width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
@@ -58,6 +438,7 @@ if (typeof CONFIG === 'undefined') {
     <button class="mp-collapse" onclick="MP.expand()" title="Mở rộng">＋</button>
   </div>
 
+  <!-- Full (expanded) -->
   <div class="player-full" style="display:none">
     <div class="mp-header">
       <div class="mp-art" id="mp-art">🎵</div>
@@ -77,16 +458,25 @@ if (typeof CONFIG === 'undefined') {
       </div>
     </div>
     <div class="mp-controls">
-      <button class="mp-btn" id="mp-shuffle-btn" onclick="MP.toggleShuffle()" title="Shuffle">♻️</button>
-      <button class="mp-btn" onclick="MP.prev()" title="Bài trước">⏮</button>
+      <button class="mp-btn" id="mp-shuffle-btn" onclick="MP.toggleShuffle()" title="Shuffle">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/></svg>
+      </button>
+      <button class="mp-btn" onclick="MP.prev()" title="Bài trước">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="19,20 9,12 19,4"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
       <button id="mp-play-btn2" onclick="MP.toggle()" style="width:40px;height:40px;background:var(--green);color:#fff;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
         <svg id="mp-play-icon2" width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
         <svg id="mp-pause-icon2" width="16" height="16" viewBox="0 0 24 24" fill="white" style="display:none"><rect x="6" y="4" width="4" height="16"/></svg>
       </button>
-      <button class="mp-btn" onclick="MP.next()" title="Bài tiếp">⏭</button>
-      <button class="mp-btn" id="mp-repeat-btn" onclick="MP.toggleRepeat()" title="Lặp lại">🔁</button>
+      <button class="mp-btn" onclick="MP.next()" title="Bài tiếp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+      <button class="mp-btn" id="mp-repeat-btn" onclick="MP.toggleRepeat()" title="Lặp lại">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/></svg>
+      </button>
     </div>
     <div class="mp-volume">
+      <svg class="mp-vol-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
       <input type="range" class="mp-vol-slider" id="mp-vol" min="0" max="100" value="40" oninput="MP.setVol(this.value)">
     </div>
     <div class="mp-playlist-toggle" onclick="MP.toggleList()">
@@ -96,7 +486,6 @@ if (typeof CONFIG === 'undefined') {
     <div class="mp-playlist" id="mp-playlist"></div>
   </div>
 </div>
-
 <audio id="bg-music" preload="none"></audio>
 
 <!-- Page content omitted for brevity -->
@@ -111,7 +500,7 @@ document.addEventListener('DOMContentLoaded', function(){
   const repeatBtn = document.getElementById('mp-repeat-btn');
   const volSlider = document.getElementById('mp-vol');
 
-  function encodePath(p){ try { return encodeURI(p); } catch(e){ return p; } }
+  function encodePath(p){ try { return encodeURI((p||'').trim()); } catch(e){ return p; } }
 
   // Build tracks list from CONFIG.nhac — support strings or {file,ten}
   let raw = (window.CONFIG && window.CONFIG.nhac) || [];
@@ -146,7 +535,10 @@ document.addEventListener('DOMContentLoaded', function(){
     if (!cleanedTracks.length) return;
     index = ((i % cleanedTracks.length) + cleanedTracks.length) % cleanedTracks.length;
     const tr = cleanedTracks[index];
-    audio.src = encodePath(tr.file);
+    // ensure relative paths are safe: add ./ if looks like local filename
+    let src = tr.file;
+    if (!/^(https?:\/\/|\/|\.\/|\.\.\/)/i.test(src)) src = './' + src;
+    audio.src = encodePath(src);
     audio.load();
     updateUIForTrack(index);
   }
@@ -182,7 +574,11 @@ document.addEventListener('DOMContentLoaded', function(){
   if (volSlider) MP.setVol(volSlider.value);
 
   // load first track
-  if (cleanedTracks.length) loadTrack(0);
+  if (cleanedTracks.length) {
+    loadTrack(0);
+    // auto-expand player so user sees playlist
+    MP.expand();
+  }
 
   // audio ended
   audio.addEventListener('ended', function(){ if (repeat) { loadTrack(index); play(); } else { MP.next(); } });
@@ -201,6 +597,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // click progress seek
   window.MP.seek = function(e){ const bar = document.querySelector('.mp-progress-bar'); if (!bar || !audio.duration) return; const rect = bar.getBoundingClientRect(); const x = e.clientX - rect.left; const pct = x/rect.width; audio.currentTime = pct * audio.duration; };
+
+  // debug logs
+  console.log('CONFIG.nhac =', window.CONFIG && window.CONFIG.nhac);
+  console.log('tracks =', cleanedTracks.map(t=>t.file));
 
 });
 </script>
