@@ -27,7 +27,25 @@ const CONFIG = {
   // ── NHẠC NỀN ───────────────────────────────────────────────
   // Đặt file MP3 cùng thư mục rồi ghi tên vào đây
   // Nếu để "" thì tự động dùng nhạc ambient tổng hợp (không cần file)
-  nhac:      "",
+  nhac:[
+  "Dập Tắt _ 熄灭.mp3",
+  "For Ya.mp3",
+  "Gió Đêm Tỏ Tình _ 晚风告白.mp3",
+  "Giấy Ghi Chú Tâm Nguyện _ 心願便利貼.mp3",
+  "Gói Gọn Hồi Ức Trao Cho Anh _ 把回忆拼好给你.mp3",
+  "Vịnh Xuân .mp3",
+  "starry silent.mp3",
+  "summertime.mp3",
+  "ta.mp3",
+  "than xuan.mp3",
+  "the blessing.mp3",
+  "the flame of love.mp3",
+  "Đắm Chìm _ 沉溺（你让我的心不再结冰）.mp3",
+  "海屿你.mp3",
+  "烂关系.mp3",
+  "爱以为常.mp3",
+  "红线.mp3"
+]
 
   // ── MÀU CHỦ ĐẠO ────────────────────────────────────────────
   // Thay đổi màu xanh lá sang màu khác nếu muốn
