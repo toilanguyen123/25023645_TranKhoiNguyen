@@ -60,7 +60,7 @@ const CONFIG = {
   // ── NỀN TRANG ──────────────────────────────────────────────
   // Để "" để dùng gradient mặc định theo màu chủ đạo
   // Hoặc ghi tên file ảnh nền: "anh-nen.jpg"
-  anhNen:    "",
+  anhNen:    "endless-summer-horizon.3840x2160.mp4",
 
   // ── NỘI DUNG TRANG GIỚI THIỆU ──────────────────────────────
   mucTieuHocTap: `Thông qua môn học này, tôi hướng đến việc nắm vững các thao tác máy tính cơ bản, tổ chức dữ liệu một cách khoa học, cũng như biết cách sử dụng các công cụ công nghệ và AI để hỗ trợ việc học tập hiệu quả tại bậc Đại học. Đặc biệt ứng dụng trong việc tra cứu và nghiên cứu chuyên sâu lĩnh vực Robotics.`,
