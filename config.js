@@ -38,7 +38,7 @@ const CONFIG = {
   "summertime.mp3",
   "ta.mp3",
   "than xuan.mp3",
-  "the blessing.mp3",
+  // "the blessing.mp3",  ← Comment dòng này (file trống)
   "the flame of love.mp3",
   "Đắm Chìm _ 沉溺（你让我的心不再结冰）.mp3",
   "海屿你.mp3",
