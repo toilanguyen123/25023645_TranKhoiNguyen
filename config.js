@@ -45,7 +45,7 @@ const CONFIG = {
   "烂关系.mp3",
   "爱以为常.mp3",
   "红线.mp3"
-]
+],
 
   // ── MÀU CHỦ ĐẠO ────────────────────────────────────────────
   // Thay đổi màu xanh lá sang màu khác nếu muốn
